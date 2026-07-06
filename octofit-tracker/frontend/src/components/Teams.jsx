@@ -1,5 +1,9 @@
 import ResourceView from './ResourceView.jsx'
 
+const endpoint = import.meta.env.VITE_CODESPACE_NAME
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/teams/`
+  : 'http://localhost:8000/api/teams/'
+
 const columns = [
   { key: 'name', label: 'Team' },
   { key: 'motto', label: 'Motto' },
@@ -8,7 +12,7 @@ const columns = [
 ]
 
 function Teams() {
-  return <ResourceView title="Teams" resource="teams" columns={columns} />
+  return <ResourceView title="Teams" resource="teams" endpoint={endpoint} columns={columns} />
 }
 
 export default Teams

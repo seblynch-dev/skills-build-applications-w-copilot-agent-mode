@@ -34,8 +34,8 @@ export function getCollection(payload) {
   return []
 }
 
-export async function fetchCollection(component) {
-  const response = await fetch(getApiEndpoint(component))
+export async function fetchCollection(component, endpoint = getApiEndpoint(component)) {
+  const response = await fetch(endpoint)
 
   if (!response.ok) {
     throw new Error(`Request failed with ${response.status}`)

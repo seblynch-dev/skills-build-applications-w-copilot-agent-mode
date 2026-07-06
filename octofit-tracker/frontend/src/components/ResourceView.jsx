@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { fetchCollection, getApiEndpoint } from '../lib/api.js'
 
-function ResourceView({ title, resource, columns }) {
+function ResourceView({ title, resource, endpoint, columns }) {
   const [items, setItems] = useState([])
   const [status, setStatus] = useState('loading')
   const [error, setError] = useState('')
+  const resourceEndpoint = endpoint ?? getApiEndpoint(resource)
 
   useEffect(() => {
     let isMounted = true
@@ -12,7 +13,7 @@ function ResourceView({ title, resource, columns }) {
     async function loadItems() {
       try {
         setStatus('loading')
-        const data = await fetchCollection(resource)
+        const data = await fetchCollection(resource, resourceEndpoint)
 
         if (isMounted) {
           setItems(data)
@@ -31,12 +32,12 @@ function ResourceView({ title, resource, columns }) {
     return () => {
       isMounted = false
     }
-  }, [resource])
+  }, [resource, resourceEndpoint])
 
   return (
     <section className="resource-view">
       <div className="section-heading">
-        <p className="eyebrow">{getApiEndpoint(resource)}</p>
+        <p className="eyebrow">{resourceEndpoint}</p>
         <h2>{title}</h2>
         <p>{items.length} records loaded</p>
       </div>
