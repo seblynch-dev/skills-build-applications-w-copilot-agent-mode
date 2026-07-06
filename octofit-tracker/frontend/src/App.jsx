@@ -1,64 +1,76 @@
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
+import { Link, NavLink, Navigate, Route, Routes } from 'react-router-dom'
+import Activities from './components/Activities.jsx'
+import Leaderboard from './components/Leaderboard.jsx'
+import Teams from './components/Teams.jsx'
+import Users from './components/Users.jsx'
+import Workouts from './components/Workouts.jsx'
+import { apiBaseUrl, isCodespacesApi } from './lib/api.js'
 import './App.css'
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="app-shell">
-        <header className="hero-panel">
+    <div className="app-shell">
+      <header className="hero-panel">
+        <div>
           <p className="eyebrow">OctoFit Tracker</p>
-          <h1>Modern multi-tier fitness tracking</h1>
+          <h1>Team fitness, wired end to end.</h1>
           <p className="lead">
-            React 19 on port 5173, ready to connect to the Express and MongoDB tiers.
+            React 19 presentation on port 5173, Express API on port 8000, and MongoDB on port 27017.
           </p>
-          <nav className="nav-links">
-            <Link to="/">Dashboard</Link>
-            <Link to="/setup">Setup</Link>
-          </nav>
-        </header>
+        </div>
+        <div className="api-status">
+          <span>{isCodespacesApi ? 'Codespaces API' : 'Local API'}</span>
+          <code>{apiBaseUrl}</code>
+        </div>
+      </header>
 
-        <main className="content-panel">
-          <Routes>
-            <Route path="/" element={<DashboardPage />} />
-            <Route path="/setup" element={<SetupPage />} />
-          </Routes>
-        </main>
-      </div>
-    </BrowserRouter>
+      <nav className="nav-links" aria-label="OctoFit sections">
+        <NavLink to="/users">Users</NavLink>
+        <NavLink to="/teams">Teams</NavLink>
+        <NavLink to="/activities">Activities</NavLink>
+        <NavLink to="/leaderboard">Leaderboard</NavLink>
+        <NavLink to="/workouts">Workouts</NavLink>
+      </nav>
+
+      <main className="content-panel">
+        <Routes>
+          <Route path="/" element={<DashboardPage />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/teams" element={<Teams />} />
+          <Route path="/activities" element={<Activities />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/workouts" element={<Workouts />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
+    </div>
   )
 }
 
 function DashboardPage() {
   return (
     <section>
-      <h2>Application tiers</h2>
+      <div className="section-heading">
+        <p className="eyebrow">Dashboard</p>
+        <h2>OctoFit Tracker</h2>
+      </div>
       <div className="info-grid">
         <article>
-          <h3>Presentation</h3>
-          <p>Vite + React 19 with Bootstrap and React Router.</p>
+          <h3>People</h3>
+          <p>Profiles, teams, and training levels flow from the backend.</p>
+          <Link to="/users">Review users</Link>
         </article>
         <article>
-          <h3>Logic</h3>
-          <p>Express API planned on port 8000.</p>
+          <h3>Performance</h3>
+          <p>Activities and leaderboard data stay compatible with paginated or array API responses.</p>
+          <Link to="/activities">View activities</Link>
         </article>
         <article>
-          <h3>Data</h3>
-          <p>MongoDB + Mongoose targeting octofit_db on port 27017.</p>
+          <h3>Guidance</h3>
+          <p>Workout suggestions are fetched from the API tier.</p>
+          <Link to="/workouts">Open workouts</Link>
         </article>
       </div>
-    </section>
-  )
-}
-
-function SetupPage() {
-  return (
-    <section>
-      <h2>Environment defaults</h2>
-      <ul className="setup-list">
-        <li>Frontend: http://localhost:5173</li>
-        <li>Backend: http://localhost:8000</li>
-        <li>MongoDB: mongodb://localhost:27017/octofit_db</li>
-      </ul>
     </section>
   )
 }
